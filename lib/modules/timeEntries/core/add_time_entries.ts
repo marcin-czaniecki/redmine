@@ -1,14 +1,13 @@
-//Name: Dodaj czas Redmine
-// Description: Dodanie do zadania czas pracy przez Redmine API
-
 import "@johnlindquist/kit";
-import { getRedmineUrl } from "../lib/common/getRedmineUrl.js";
-import { getUserId } from "../lib/common/getUserId.js";
-import { inputDate } from "../lib/common/inputDate.js";
-import { postRedmine } from "../lib/common/requestRedmine.js";
-import { RedmineIssue } from "../lib/types/RedmineIssue.js";
-import { RedmineTime } from "../lib/types/RedmineTime.js";
-import { getIssues } from "../lib/utils/getIssues.js";
+import { getRedmineUrl } from "../../../common/getRedmineUrl.js";
+import { getUserId } from "../../../common/getUserId.js";
+import { inputDate } from "../../../common/inputDate.js";
+import { postRedmine } from "../../../common/requestRedmine.js";
+import { RedmineIssue } from "../../../types/RedmineIssue.js";
+import { RedmineTime } from "../../../types/RedmineTime.js";
+import { getIssues } from "../../../utils/getIssues.js";
+
+const date = await inputDate();
 
 const issues = await getIssues();
 
@@ -23,7 +22,6 @@ const issue: RedmineIssue = await arg({
 });
 
 // const issue = issues.find((issue) => issue.id === Number(issueId));
-const date = await inputDate();
 
 const hours = await arg({
   placeholder: "Podaj ilość godzin (np. 1.5)",

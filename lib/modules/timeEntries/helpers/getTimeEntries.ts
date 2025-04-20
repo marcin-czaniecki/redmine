@@ -1,6 +1,6 @@
-import { RedmineTime } from "../../types/RedmineTime.js";
-import { getRedmineUrl } from "../../common/getRedmineUrl.js";
-import { getRedmine } from "../../common/requestRedmine.js";
+import { RedmineTime } from "../../../types/RedmineTime.js";
+import { getRedmineUrl } from "../../../common/getRedmineUrl.js";
+import { getRedmine } from "../../../common/requestRedmine.js";
 
 export interface GetTimeEntriesParams {
   userId: number;

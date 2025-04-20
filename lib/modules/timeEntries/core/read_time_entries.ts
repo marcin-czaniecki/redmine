@@ -1,16 +1,13 @@
-//Name: Pobierz czas pracy z Redmine
-// Description: Pobierz dane o czasie pracy z Redmine API
-
 import "@johnlindquist/kit";
-import { getDateRange } from "../lib/common/getDateRange.js";
-import { getRedmineUrl } from "../lib/common/getRedmineUrl.js";
-import { getUserId } from "../lib/common/getUserId.js";
-import { inputDateRange } from "../lib/common/inputDateRange.js";
-import { generateIssueTimeEntryHTML } from "../lib/modules/timeEntries/generateIssueTimeEntryHTML.js";
-import { generateProjectTimeEntryHTML } from "../lib/modules/timeEntries/generateProjectTimeEntryHTML.js";
-import { getTimeEntries } from "../lib/modules/timeEntries/getTimeEntries.js";
-import { displayError } from "../lib/utils/displayError.js";
-import { getIssue } from "../lib/utils/getIssue.js";
+import { getDateRange } from "../../../common/getDateRange.js";
+import { getRedmineUrl } from "../../../common/getRedmineUrl.js";
+import { getUserId } from "../../../common/getUserId.js";
+import { inputDateRange } from "../../../common/inputDateRange.js";
+import { generateIssueTimeEntryHTML } from "../helpers/generateIssueTimeEntryHTML.js";
+import { generateProjectTimeEntryHTML } from "../helpers/generateProjectTimeEntryHTML.js";
+import { getTimeEntries } from "../helpers/getTimeEntries.js";
+import { displayError } from "../../../utils/displayError.js";
+import { getIssue } from "../../../utils/getIssue.js";
 const date = await inputDateRange();
 
 const limit = 5;
