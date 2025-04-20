@@ -2,36 +2,15 @@
 
 import "@johnlindquist/kit";
 
-import { getIssues } from "../lib/utils/getIssues.js";
 import { getRedmineUrl } from "../lib/common/getRedmineUrl.js";
-import { getIssue } from "../lib/utils/getIssue.js";
+import { chooseIssue } from "../lib/modules/issues/helpers/chooseIssue.js";
 import { RedmineIssue } from "../lib/types/RedmineIssue.js";
+import { getIssue } from "../lib/utils/getIssue.js";
+import { getIssues } from "../lib/utils/getIssues.js";
 
 const issues = await getIssues();
 
-const choosedIssue: RedmineIssue = await arg({
-  placeholder: "Wybierz zadanie",
-  choices: issues
-    .sort((a, b) => {
-      const priorityA = a.priority.id;
-      const priorityB = b.priority.id;
-
-      // Sort by priority (higher priority ID first)
-      if (priorityA !== priorityB) {
-        return priorityB - priorityA; // Descending order by priority
-      }
-      // If priorities are the same, sort by ID for consistent ordering
-      return a.id - b.id;
-    })
-    .map((issue) => {
-      return {
-        name: `[${issue.id}] ${issue?.subject}`,
-        description: `${issue.priority.name}, ${issue.status.name}, ${issue.project.name}`,
-        value: issue,
-      };
-    }),
-});
-
+const choosedIssue: RedmineIssue = await chooseIssue(issues);
 const issue = await getIssue(choosedIssue.id);
 
 await div(

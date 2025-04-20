@@ -57,7 +57,7 @@ try {
       shortcut: ",",
       onAction: async () => {
         if (offset <= 0) {
-          await notify("Przyszłość jest nieznana, to ty ją tworzysz!");
+          await notify("Nie na to się umawialiśmy 👀");
           return;
         }
         offset -= limit;
