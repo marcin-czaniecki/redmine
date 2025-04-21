@@ -6,22 +6,14 @@ import { postRedmine } from "../../../common/requestRedmine.js";
 import { RedmineIssue } from "../../../types/RedmineIssue.js";
 import { RedmineTime } from "../../../types/RedmineTime.js";
 import { getIssues } from "../../../utils/getIssues.js";
+import { chooseIssue } from "../../issues/helpers/chooseIssue.js";
 
 const date = await inputDate();
 
 const issues = await getIssues();
 
-const issuesChoices = issues.map((issue) => ({
-  name: `${issue.id}: ${issue.subject}`,
-  value: issue,
-}));
-
-const issue: RedmineIssue = await arg({
-  placeholder: "Wybierz zadanie",
-  choices: issuesChoices,
-});
-
-// const issue = issues.find((issue) => issue.id === Number(issueId));
+const id = await chooseIssue(issues);
+const issue = issues.find((issue) => Number(issue.id) === Number(id));
 
 const hours = await arg({
   placeholder: "Podaj ilość godzin (np. 1.5)",
@@ -52,13 +44,14 @@ const timeResponse = (await postRedmine(`${await getRedmineUrl()}/time_entries.j
 };
 
 if (timeResponse.status === 201) {
-  const { time_entry } = timeResponse.data;
-
-  await div(
-    `<h1>Czas pracy został dodany</h1><div>
-    <pre>${JSON.stringify(time_entry, null, 2)}</pre>
-    </div>`
-  );
+  await div(`<h1>Czas pracy został dodany</h1>`, [
+    {
+      name: "Dodaj czas pracy",
+      onAction: async () => {
+        await run("../issues/core/read_issue.ts", id.toString());
+      },
+    },
+  ]);
 } else {
   await div("Błąd podczas dodawania czasu pracy.");
 }

@@ -56,15 +56,21 @@ ${formattedJournalNotes}
 
 await div({ height: 1000, html: formattedIssueDetails }, [
   {
-    name: "Zmień status",
+    name: "Dodaj czas pracy",
     onAction: async () => {
-      await run("./edit_issue_status.ts", id.toString());
+      await run("../timeEntries/core/add_time_entries.ts", new Date().toISOString().slice(0, 10), id.toString());
     },
   },
   {
     name: "Dodaj notatkę",
     onAction: async () => {
       await run("./add_note.ts", id.toString());
+    },
+  },
+  {
+    name: "Zmień status",
+    onAction: async () => {
+      await run("./edit_issue_status.ts", id.toString());
     },
   },
   {
