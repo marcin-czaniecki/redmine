@@ -22,7 +22,6 @@ const hours = await arg({
 
 const note = await textarea({
   placeholder: "Wpisz notatkę do czasu pracy",
-  value: "",
   height: 200,
 });
 
