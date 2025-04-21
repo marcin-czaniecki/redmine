@@ -23,3 +23,14 @@ export async function postRedmine(url: string, body: object, config?: AxiosReque
     },
   });
 }
+
+export async function putRedmine(url: string, body: object, config?: AxiosRequestConfig<any>) {
+  return await put(url, body, {
+    ...config,
+    headers: {
+      ...(config?.headers || {}),
+      "Content-Type": "application/json",
+      "X-Redmine-API-Key": await getRedmineApiKey(),
+    },
+  });
+}
