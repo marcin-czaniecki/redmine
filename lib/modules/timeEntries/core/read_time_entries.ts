@@ -21,7 +21,7 @@ async function readTimeEntries(date: string, offset?: number, limit: number = 5)
   const timeEntries = await getTimeEntries({ userId, from, to, offset, limit });
 
   if (!timeEntries || timeEntries.length === 0) {
-    await div(md(`**Brak wpisów czasu pracy dla wybranego zakresu dat.**`));
+    return "";
   }
 
   const tempTimeEntries = timeEntries.map(async (entry, index) => {
@@ -49,7 +49,13 @@ try {
       shortcut: ".",
       onAction: async () => {
         offset += limit;
-        await setPanel(await readTimeEntries(date, offset, limit));
+
+        const result = await readTimeEntries(date, offset, limit);
+        if (result === "") {
+          await notify("Nic ciebie tam nie czeka 👀");
+          return;
+        }
+        await setPanel(result);
       },
     },
     {

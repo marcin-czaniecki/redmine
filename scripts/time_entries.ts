@@ -1,9 +1,8 @@
-// Name: Czas pracy Redmine
+// Name: Redmine - Czas pracy
 
 import "@johnlindquist/kit";
 
 await arg({
-  placeholder: "Wybierz zadanie",
   choices: [
     {
       name: "Dodaj dzisiejszy czas pracy",
