@@ -44,5 +44,4 @@ export interface RedmineIssue {
   created_on: string;
   updated_on: string;
   closed_on: string | null;
-  notes?: unknown[];
 }
