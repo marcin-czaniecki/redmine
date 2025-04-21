@@ -66,6 +66,12 @@ await div({ height: 1000, html: result }, [
     },
   },
   {
+    name: "Dodaj notatkę",
+    onAction: async () => {
+      await run("./add_note.ts", id.toString());
+    },
+  },
+  {
     name: "Edytuj tytuł",
     onAction: async () => {
       await run("./edit_issue_subject.ts", id.toString());
