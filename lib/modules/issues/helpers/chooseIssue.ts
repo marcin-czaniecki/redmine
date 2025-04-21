@@ -18,7 +18,7 @@ export async function chooseIssue(issues: RedmineIssue[] = []): Promise<number> 
       .map((issue) => {
         return {
           name: `[${issue.id}] ${issue?.subject}`,
-          description: `${issue.priority.name}, ${issue.status.name}, ${issue.project.name}`,
+          description: `${issue.priority.name}, ${issue.status.name}, ${issue.project.name}, Autor: ${issue.author?.name}, Przypisany: ${issue.assigned_to?.name}`,
           value: issue.id,
         };
       }),

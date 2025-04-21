@@ -10,7 +10,7 @@ import { chooseIssue } from "../../issues/helpers/chooseIssue.js";
 
 const date = await inputDate();
 
-const issues = await getIssues();
+const issues = await getIssues("me");
 
 const id = await chooseIssue(issues);
 const issue = issues.find((issue) => Number(issue.id) === Number(id));

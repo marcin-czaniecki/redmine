@@ -6,23 +6,30 @@ import { getIssue } from "../../../utils/getIssue.js";
 import { getIssues } from "../../../utils/getIssues.js";
 import { chooseIssue } from "../helpers/chooseIssue.js";
 import { generateNote } from "../helpers/generateNote.js";
+try {
+  const issues1 = await getIssues("me");
+  const issues2 = await getIssues(null, "me");
 
-const issues = await getIssues();
+  const issuesMap = new Map<number, (typeof issues1)[0]>();
+  for (const issue of [...issues1, ...issues2]) {
+    issuesMap.set(issue.id, issue);
+  }
+  const issues = Array.from(issuesMap.values());
 
-const id = await chooseIssue(issues);
-const issue = await getIssue(id);
+  const id = await chooseIssue(issues);
+  const issue = await getIssue(id);
 
-const customFieldsRows =
-  issue.custom_fields && issue.custom_fields.length ? issue.custom_fields.map((field) => `| **${field.name}:** | ${Array.isArray(field.value) ? field.value.join(", ") : field.value || "brak"} |  |  |`).join("\n") : "";
+  const customFieldsRows =
+    issue.custom_fields && issue.custom_fields.length ? issue.custom_fields.map((field) => `| **${field.name}:** | ${Array.isArray(field.value) ? field.value.join(", ") : field.value || "brak"} |  |  |`).join("\n") : "";
 
-const formattedJournalNotes =
-  issue.journals &&
-  issue.journals
-    .filter((journal) => journal.notes && journal.notes.at(0) != "!")
-    .map(generateNote)
-    .join("\n\n---\n");
+  const formattedJournalNotes =
+    issue.journals &&
+    issue.journals
+      .filter((journal) => journal.notes && journal.notes.at(0) != "!")
+      .map(generateNote)
+      .join("\n\n---\n");
 
-const formattedIssueDetails = md(`
+  const formattedIssueDetails = md(`
 # [#${issue.id}](${await getRedmineUrl()}/issues/${issue.id}) ${issue.subject}\n\n
 
 |                 |                        |                         |                                       |
@@ -54,41 +61,45 @@ ${convertTextileToMarkdown(issue.description) || "brak opisu"}
 ${formattedJournalNotes}
 `);
 
-await div({ height: 1000, html: formattedIssueDetails }, [
-  {
-    name: "Dodaj czas pracy",
-    onAction: async () => {
-      await run("../timeEntries/core/add_time_entries.ts", new Date().toISOString().slice(0, 10), id.toString());
+  await div({ height: 1000, html: formattedIssueDetails }, [
+    {
+      name: "Dodaj czas pracy",
+      onAction: async () => {
+        await run("../timeEntries/core/add_time_entries.ts", new Date().toISOString().slice(0, 10), id.toString());
+      },
     },
-  },
-  {
-    name: "Dodaj notatkę",
-    onAction: async () => {
-      await run("./add_note.ts", id.toString());
+    {
+      name: "Dodaj notatkę",
+      onAction: async () => {
+        await run("./add_note.ts", id.toString());
+      },
     },
-  },
-  {
-    name: "Zmień status",
-    onAction: async () => {
-      await run("./edit_issue_status.ts", id.toString());
+    {
+      name: "Zmień status",
+      onAction: async () => {
+        await run("./edit_issue_status.ts", id.toString());
+      },
     },
-  },
-  {
-    name: "Edytuj tytuł",
-    onAction: async () => {
-      await run("./edit_issue_subject.ts", id.toString());
+    {
+      name: "Edytuj tytuł",
+      onAction: async () => {
+        await run("./edit_issue_subject.ts", id.toString());
+      },
     },
-  },
-  {
-    name: "Edytuj opis",
-    onAction: async () => {
-      await run("./edit_issue_description.ts", id.toString());
+    {
+      name: "Edytuj opis",
+      onAction: async () => {
+        await run("./edit_issue_description.ts", id.toString());
+      },
     },
-  },
-  {
-    name: "Zmień piorytet",
-    onAction: async () => {
-      await run("./edit_issue_priority.ts", id.toString());
+    {
+      name: "Zmień piorytet",
+      onAction: async () => {
+        await run("./edit_issue_priority.ts", id.toString());
+      },
     },
-  },
-]);
+  ]);
+} catch (error) {
+  console.log(error);
+  await div(JSON.stringify(error.message));
+}
