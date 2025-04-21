@@ -1,9 +1,9 @@
 import "@johnlindquist/kit";
+
 import { getRedmineUrl } from "../../../common/getRedmineUrl.js";
 import { getUserId } from "../../../common/getUserId.js";
 import { inputDate } from "../../../common/inputDate.js";
 import { postRedmine } from "../../../common/requestRedmine.js";
-import { RedmineIssue } from "../../../types/RedmineIssue.js";
 import { RedmineTime } from "../../../types/RedmineTime.js";
 import { getIssues } from "../../../utils/getIssues.js";
 import { chooseIssue } from "../../issues/helpers/chooseIssue.js";
@@ -26,7 +26,7 @@ const note = await textarea({
   height: 200,
 });
 
-const timeResponse = (await postRedmine(`${await getRedmineUrl()}/time_entries.json`, {
+const timeResponse = await postRedmine<{ time_entry: RedmineTime[] }>(`${await getRedmineUrl()}/time_entries.json`, {
   time_entry: {
     issue_id: issue.id,
     project_id: issue.project.id,
@@ -36,17 +36,12 @@ const timeResponse = (await postRedmine(`${await getRedmineUrl()}/time_entries.j
     hours: Number(hours),
     comments: note,
   },
-})) as {
-  status: number;
-  data: {
-    time_entry: RedmineTime[];
-  };
-};
+});
 
 if (timeResponse.status === 201) {
   await div(`<h1>Czas pracy został dodany</h1>`, [
     {
-      name: "Dodaj czas pracy",
+      name: `Zobacz zagadnienie [${id.toString()}] ${issue.subject}`,
       onAction: async () => {
         await run("../issues/core/read_issue.ts", id.toString());
       },

@@ -13,15 +13,15 @@ export async function getRedmine<Data extends object = object>(url: string, conf
   })) as AxiosResponse<Data, any>;
 }
 
-export async function postRedmine(url: string, body: object, config?: AxiosRequestConfig<any>) {
-  return await post(url, body, {
+export async function postRedmine<Data extends object = object>(url: string, body: object, config?: AxiosRequestConfig<any>) {
+  return (await post(url, body, {
     ...config,
     headers: {
       ...(config?.headers || {}),
       "Content-Type": "application/json",
       "X-Redmine-API-Key": await getRedmineApiKey(),
     },
-  });
+  })) as AxiosResponse<Data, any>;
 }
 
 export async function putRedmine(url: string, body: object, config?: AxiosRequestConfig<any>) {
