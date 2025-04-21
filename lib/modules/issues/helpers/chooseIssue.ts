@@ -1,6 +1,6 @@
 import { RedmineIssue } from "../../../types/RedmineIssue.js";
 
-export async function chooseIssue(issues: RedmineIssue[]): Promise<RedmineIssue> {
+export async function chooseIssue(issues: RedmineIssue[] = []): Promise<number> {
   return await arg({
     placeholder: "Wybierz zadanie",
     choices: issues
@@ -19,7 +19,7 @@ export async function chooseIssue(issues: RedmineIssue[]): Promise<RedmineIssue>
         return {
           name: `[${issue.id}] ${issue?.subject}`,
           description: `${issue.priority.name}, ${issue.status.name}, ${issue.project.name}`,
-          value: issue,
+          value: issue.id,
         };
       }),
   });
